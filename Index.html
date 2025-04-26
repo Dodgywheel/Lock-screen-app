@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PIN Lock Screen</title>
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="PIN Lock">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(160deg, #000000, #1c1c1c);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      color: white;
+    }
+    .lock-header {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 3rem;
+      font-weight: 300;
+    }
+    #time {
+      letter-spacing: 1px;
+    }
+    .lock-screen {
+      margin-top: 60px;
+      text-align: center;
+    }
+    input[type="password"] {
+      font-size: 2rem;
+      text-align: center;
+      padding: 0.5rem;
+      width: 10rem;
+      margin-bottom: 2rem;
+      border: none;
+      background: none;
+      color: white;
+      border-bottom: 2px solid white;
+      outline: none;
+    }
+    .pin-pad {
+      display: grid;
+      grid-template-columns: repeat(3, 80px);
+      gap: 1.2rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .pin-pad button {
+      width: 80px;
+      height: 80px;
+      font-size: 1.5rem;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+    .pin-pad button:active {
+      background-color: white;
+      color: black;
+    }
+    .submit-btn {
+      font-size: 1.5rem;
+      padding: 0.7rem 2rem;
+      border: none;
+      border-radius: 10px;
+      background-color: white;
+      color: black;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .submit-btn:active {
+      background-color: grey;
+    }
+  </style>
+</head>
+<body>
+  <div class="lock-header">
+    <div id="time"></div>
+  </div>
+
+  <div class="lock-screen">
+    <h1>Enter PIN</h1>
+    <input type="password" id="pin-input" maxlength="10" readonly />
+    <div class="pin-pad">
+      <button onclick="appendDigit('1')">1</button>
+      <button onclick="appendDigit('2')">2</button>
+      <button onclick="appendDigit('3')">3</button>
+      <button onclick="appendDigit('4')">4</button>
+      <button onclick="appendDigit('5')">5</button>
+      <button onclick="appendDigit('6')">6</button>
+      <button onclick="appendDigit('7')">7</button>
+      <button onclick="appendDigit('8')">8</button>
+      <button onclick="appendDigit('9')">9</button>
+      <button onclick="clearPin()">C</button>
+      <button onclick="appendDigit('0')">0</button>
+      <button onclick="deleteLastDigit()">Del</button>
+    </div>
+    <button class="submit-btn" onclick="submitPin()">Submit</button>
+  </div>
+
+  <script>
+    function appendDigit(digit) {
+      const input = document.getElementById('pin-input');
+      input.value += digit;
+    }
+    function deleteLastDigit() {
+      const input = document.getElementById('pin-input');
+      input.value = input.value.slice(0, -1);
+    }
+    function clearPin() {
+      document.getElementById('pin-input').value = '';
+    }
+    function submitPin() {
+      const pin = document.getElementById('pin-input').value;
+      const pinMap = {
+        '0001': 'Guinness',
+        '0002': 'Carling lager',
+        '0003': 'Fosters lager',
+        '0004': 'Stella Artois',
+        '0005': 'Amstel Lager',
+        '0006': 'Strongbow',
+        '0007': 'Punk IPA',
+        '0008': 'Peroni',
+        '0009': 'Corona lager',
+        '0010': 'Budweiser lager',
+        '0011': 'Desperados lager',
+        '0012': 'Kopperberg cider',
+        '0013': 'Thatchers gold',
+        '0014': 'Smirnoff Vodka',
+        '0015': "Gordon's gin",
+        '0016': 'Captain Morgan spiced gold',
+        '0017': 'Jack Daniels Whiskey',
+        '0018': 'Bacardi Rum',
+        '0019': 'Jameson Irish whiskey',
+        '0020': 'Bombay Sapphire',
+        '0021': 'Absolut Vodka',
+        '0022': 'Malibu Coconut rum',
+        '0023': 'Jagermeister',
+        '0024': 'Pinot Grigio',
+        '0025': 'Moet & Chandon',
+        '0026': 'Sauvignon blanc',
+        '0027': 'Shiraz',
+        '0028': 'Baileys Irish cream',
+        '0029': 'Aperol Spritz',
+        '0030': 'Pimms',
+        '0031': 'Becks blue'
+      };
+      if (pinMap[pin]) {
+        const searchTerm = pinMap[pin];
+        const imageSearchUrl = `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(searchTerm)}`;
+        window.open(imageSearchUrl, '_blank');
+      } else {
+        alert('Invalid PIN');
+        clearPin();
+      }
+    }
+    function updateTime() {
+      const now = new Date();
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      document.getElementById('time').textContent = `${hours}:${minutes}`;
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+        .then(function(registration) {
+          console.log('Service Worker registered with scope:', registration.scope);
+        })
+        .catch(function(error) {
+          console.log('Service Worker registration failed:', error);
+        });
+    }
+  </script>
+</body>
+</html>
