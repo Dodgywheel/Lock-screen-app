@@ -1,0 +1,9 @@
+{
+  "name": "Your Round Lock",
+  "short_name": "PIN Lock",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": []
+}
