@@ -1,7 +1,7 @@
 {
   "name": "Your Round Lock",
   "short_name": "PIN Lock",
-  "start_url": "/",
+  "start_url": "/your-lock-app/"
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",
